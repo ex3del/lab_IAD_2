@@ -37,13 +37,29 @@ def ierarchy():
     plt.show()
 
 
-features = ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']
-iris_pd.loc[[iris_pd['target'] == 0.0],'target'] = 'iris_setosa'
-x = iris_pd.loc[:, features].values
-y = iris_pd.loc[:, ['target']].values
-x = StandardScaler().fit_transform(x) # pd.DataFrame(data=x, columns=features).head())
-pca = PCA(n_components=2)
-prcp_compon = pca.fit_transform(x)
-prcp_df = pd.DataFrame(data = prcp_compon, columns=['PC1', 'PC2'])
-final_df = pd.concat([prcp_df, iris_pd['target']], axis=1)
-print(iris_pd.head())
+def pca(tabl):
+    features = ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']
+    tabl = tabl.replace({'target': {0: 'iris_setosa', 1: 'iris_versicolor', 2: 'iris_virginica'}})
+    x = tabl.loc[:, features].values
+    y = tabl.loc[:, ['target']].values
+    x = StandardScaler().fit_transform(x) # pd.DataFrame(data=x, columns=features).head())
+    pca = PCA(n_components=2)
+    prcp_compon = pca.fit_transform(x)
+    prcp_df = pd.DataFrame(data=prcp_compon, columns=['PC1', 'PC2'])
+    final_df = pd.concat([prcp_df, tabl['target']], axis=1)
+    fig = plt.figure(figsize=(10, 10))
+    ax = fig.add_subplot(1, 1, 1)
+    ax.set_xlabel('PC 1')
+    ax.set_ylabel('PC 2')
+    ax.set_label('График двух главных компонент')
+
+    targets = ['iris-setosa', 'iris-versicolor', 'iris-virginica']
+    colors = ['r', 'g', 'b']
+    for target, color in zip(targets, colors):
+        indicesToKeep = final_df['target'] == target
+        ax.scatter(final_df.loc[indicesToKeep, 'PC1'])
+    ax.legend(targets)
+    ax.grid()
+
+
+pca(iris_pd)
