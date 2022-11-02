@@ -47,19 +47,20 @@ def pca(tabl):
     prcp_compon = pca.fit_transform(x)
     prcp_df = pd.DataFrame(data=prcp_compon, columns=['PC1', 'PC2'])
     final_df = pd.concat([prcp_df, tabl['target']], axis=1)
-    fig = plt.figure(figsize=(10, 10))
-    ax = fig.add_subplot(1, 1, 1)
-    ax.set_xlabel('PC 1')
-    ax.set_ylabel('PC 2')
-    ax.set_label('График двух главных компонент')
+    print(sum(pca.explained_variance_ratio_))
+    def pca_graph():
+        targets = np.array(['iris-setosa', 'iris-versicolor', 'iris-virginica'])
+        colors = ['red', 'green', 'blue']
+        koef = [0, 50, 100, 150]
+        k = 1
+        for targ, col in zip(targets, colors):
+            plt.scatter(final_df['PC1'][koef[k - 1]: koef[k]], final_df['PC2'][koef[k - 1]: koef[k]], color=col, label=targ)
+            k += 1
+        plt.grid()
+        plt.legend()
+        plt.xlabel('PC1')
+        plt.ylabel('PC2')
+        plt.title('2 Component PCA')
+        plt.show()
 
-    targets = ['iris-setosa', 'iris-versicolor', 'iris-virginica']
-    colors = ['r', 'g', 'b']
-    for target, color in zip(targets, colors):
-        indicesToKeep = final_df['target'] == target
-        ax.scatter(final_df.loc[indicesToKeep, 'PC1'])
-    ax.legend(targets)
-    ax.grid()
 
-
-pca(iris_pd)
