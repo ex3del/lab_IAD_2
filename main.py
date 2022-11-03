@@ -8,6 +8,9 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.cluster import KMeans
 
+
+
+
 iris = load_iris()
 # 0 - iris_setosa, 1- iris_versicolor, 2-iris_virginica
 # 'sepal length (cm)' ,  'petal length (cm)', 'petal width (cm)', 'sepal width (cm)'
